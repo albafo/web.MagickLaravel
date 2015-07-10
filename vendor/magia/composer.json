@@ -1,0 +1,15 @@
+{
+    "name": "magia/magia",
+    "authors": [
+        {
+            "name": "Alvaro Baño",
+            "email": "alvaro.bano.fos@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+      "psr-4": {
+        "Magia\\": "src"
+      }
+    }
+}
