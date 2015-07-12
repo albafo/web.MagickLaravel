@@ -95,7 +95,8 @@ class AdminController extends Controller{
     {
         $modelObject = $this->generateModel($model);
         $primaryKey = $modelObject->getPrimaryKey();
-        return view('magia::list', ['modelObject'=>$modelObject, 'primaryKey'=>$primaryKey, 'modelName'=>$model]);
+        $count = $modelObject->all()->count();
+        return view('magia::list', ['count'=>$count, 'modelObject'=>$modelObject, 'primaryKey'=>$primaryKey, 'modelName'=>$model]);
 
 
     }
@@ -105,12 +106,13 @@ class AdminController extends Controller{
         $model = $this->generateModel($model);
         list($index, $value) = $this->extractParameter($id);
         $item = $model->where($index, $value)->first();
-
+        return view('magia::edit', ['item'=>$item]);
     }
 
     public function generateModel($model)
     {
-        $model = ucfirst($model);
+        $model = $this->cleanModel($model);
+
         $modelPath = '\\App\\'.$model;
         if(!class_exists($modelPath)) {
             throw new \Exception("Class $model not found");
@@ -128,6 +130,15 @@ class AdminController extends Controller{
     {
         $parts = explode(":", $parameter);
         return array($parts[0], $parts[1]);
+    }
+
+    public function cleanModel($model)
+    {
+        $parts = explode("-", $model);
+        $model = '';
+        foreach($parts as $part)
+            $model .= ucfirst($part);
+        return $model;
     }
 
 

@@ -6,7 +6,16 @@
                 <div class="panel-heading clearfix">
                     <h4 class="panel-title">Listado de {{$modelObject->getTitle()}}</h4>
                 </div>
+
                 <div class="panel-body">
+                    @if($count < 1)
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>No hay ningún registro insertado</h3>
+                            </div>
+                        </div>
+
+                    @else
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead>
@@ -32,6 +41,7 @@
                         </table>
                     </div>
                 </div>
+                @endif
             </div>
         </div>
     </div>

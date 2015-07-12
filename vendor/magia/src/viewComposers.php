@@ -8,7 +8,9 @@
 
 View::composer('magia::layout', function($view)
 {
+
     $view->css = array(
+        "plugins/bootstrap/css/bootstrap.min.css",
         "css/custom.css",
         "css/modern.min.css",
         "css/themes/green.css",
@@ -22,7 +24,7 @@ View::composer('magia::layout', function($view)
         "plugins/offcanvasmenueffects/css/menu_cornerbox.css",
         "plugins/line-icons/simple-line-icons.css",
         "plugins/fontawesome/css/font-awesome.css",
-        "plugins/bootstrap/css/bootstrap.min.css",
+
         "plugins/uniform/css/uniform.default.min.css",
         "plugins/pace-master/themes/blue/pace-theme-flash.css",
     );
@@ -71,3 +73,5 @@ View::composer('magia::layout', function($view)
         $item = asset("packages/magia/" . $item);
     }
 });
+
+View::composer('magia::edit', 'Magia\\Model\\ViewComposers\\EditComposer');

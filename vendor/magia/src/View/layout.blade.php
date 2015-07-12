@@ -482,6 +482,9 @@
                 <div id="main-wrapper">
                     @yield('content')
                 </div>
+                <div class="page-footer">
+                    <p class="no-s">2015 © Modern by Steelcoders.</p>
+                </div>
             </div><!-- Page Inner -->
         </main><!-- Page Content -->
         <nav class="cd-nav-container" id="cd-nav">
