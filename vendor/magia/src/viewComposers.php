@@ -6,6 +6,8 @@
  * Time: 00:18
  */
 
+use \Magia\Model\ViewComposers\ViewIncludes;
+
 View::composer('magia::layout', function($view)
 {
 
@@ -29,6 +31,8 @@ View::composer('magia::layout', function($view)
         "plugins/pace-master/themes/blue/pace-theme-flash.css",
     );
 
+    $view->css = array_merge($view->css, ViewIncludes::getInstance()->getCss());
+
     foreach($view->css as &$item) {
         $item = asset("packages/magia/" . $item);
     }
@@ -37,6 +41,8 @@ View::composer('magia::layout', function($view)
         "plugins/3d-bold-navigation/js/modernizr.js",
         "plugins/offcanvasmenueffects/js/snap.svg-min.js"
     );
+
+    $view->jsBefore = array_merge($view->jsBefore, ViewIncludes::getInstance()->getJsBefore());
 
     $view->jsAfter = array(
         "plugins/jquery/jquery-2.1.3.min.js",
@@ -65,6 +71,10 @@ View::composer('magia::layout', function($view)
         "js/pages/dashboard.js"
     );
 
+    $view->jsAfter = array_merge($view->jsAfter, ViewIncludes::getInstance()->getJsAfter());
+
+
+
     foreach($view->jsBefore as &$item) {
         $item = asset("packages/magia/" . $item);
     }
@@ -72,6 +82,15 @@ View::composer('magia::layout', function($view)
     foreach($view->jsAfter as &$item) {
         $item = asset("packages/magia/" . $item);
     }
+
+    $view->scripts = array();
+
+    foreach(ViewIncludes::getInstance()->getScripts() as $script)
+    {
+        $view->scripts[] = "$script";
+    }
+
+
 });
 
 View::composer('magia::edit', 'Magia\\Model\\ViewComposers\\EditComposer');

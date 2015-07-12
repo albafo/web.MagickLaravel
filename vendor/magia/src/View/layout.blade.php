@@ -549,7 +549,9 @@
         @foreach($jsAfter as $jsSrc)
         <script src="{{$jsSrc}}"></script>
         @endforeach
-
+        @foreach($scripts as $script)
+            {!!$script!!}
+        @endforeach
         
     </body>
 </html>

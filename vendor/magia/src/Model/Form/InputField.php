@@ -9,7 +9,7 @@
 namespace Magia\Model\Form;
 
 
-class InputField {
+class InputField extends Field{
 
     protected $type = '';
     protected $htmlAttributes = '';
@@ -35,6 +35,7 @@ class InputField {
      */
     public static function generateField($column, $value=null)
     {
+
         $fieldObject = null;
         $type = $column->getType()->getName();
         $field = null;
@@ -46,6 +47,9 @@ class InputField {
             case 'string':
                 $field = "Text";
                 break;
+            case 'boolean':
+                $field = "Checkbox";
+                break;
             default:
                 $field = null;
         }
@@ -54,8 +58,7 @@ class InputField {
             $fieldComposer = "\\Magia\\Model\\Form\\" . $field . "Field";
 
             $fieldObject = new InputField();
-            $fieldObject->labelName = ucfirst(strtolower($column->getName()));
-            $fieldObject->labelFor = "field_".$column->getName();
+            $fieldObject->setLabel($column->getName());
             $fieldObject->type = $fieldComposer::TYPE;
             $fieldObject->htmlAttributes = $fieldComposer::getHtmlAttributes($column, $value);
         }

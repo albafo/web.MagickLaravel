@@ -16,6 +16,7 @@ class FieldGenerator {
      * @param \Magia\Model\MagickEloquent $item
      */
 
+
     public function generateFields($item)
     {
         $fields = array();
@@ -60,17 +61,26 @@ class FieldGenerator {
     public function selectFieldComposer($column)
     {
         $type = $column->getType()->getName();
-        
+
         $field = null;
+        $addScripts = false;
+
         switch($type) {
             case 'integer':
             case 'string':
+            case 'boolean':
                 $field = 'Input';
+                break;
+            case 'text':
+                $field = 'Wysiwyg';
                 break;
             default :
                 $field = 'Input';
 
         }
+
+
+
 
         $fieldComposer = $field."Field";
         return "\\Magia\\Model\\Form\\".$fieldComposer;

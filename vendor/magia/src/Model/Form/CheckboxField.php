@@ -10,21 +10,19 @@ namespace Magia\Model\Form;
 
 
 
-class TextField extends InputField{
+class CheckboxField extends InputField{
 
-    const TYPE = "text";
+    const TYPE = "checkbox";
 
     protected static function getHtmlAttributes($column, $value = null)
     {
         $result = parent::getHtmlAttributes($column, $value);
 
-        if($length = $column->getLength()) {
-            $result .= "maxlength='$length' ";
+        if($value) {
+            $result .= "checked ";
         }
         return $result;
     }
-
-
 
 
 }
