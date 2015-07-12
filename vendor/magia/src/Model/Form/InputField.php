@@ -42,6 +42,10 @@ class InputField extends Field{
         switch($type)
         {
             case 'integer':
+            case 'float':
+            case 'smallint':
+            case 'bigint':
+            case 'decimal':
                 $field = "Number";
                 break;
             case 'string':
@@ -49,6 +53,15 @@ class InputField extends Field{
                 break;
             case 'boolean':
                 $field = "Checkbox";
+                break;
+            case 'date':
+                $field = "Date";
+                break;
+            case 'datetime':
+                $field = "DateTime";
+                break;
+            case 'time':
+                $field = "Time";
                 break;
             default:
                 $field = null;

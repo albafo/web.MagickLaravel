@@ -21,6 +21,21 @@ class NumberField extends InputField{
         {
             $result .= "min='0' ";
         }
+        if($column->getType()->getName() == "float" || $column->getType()->getName() == "decimal") {
+
+
+            $zeroDecimal = "";
+            if($precision = $column->getScale()){
+
+                for($i=1; $i<$precision; $i++) {
+                    $zeroDecimal .= "0";
+                }
+            }
+
+            $result .= "step='0.".$zeroDecimal."1' ";
+        }
+
+
         return $result;
     }
 

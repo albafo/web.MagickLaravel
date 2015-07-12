@@ -69,6 +69,13 @@ class FieldGenerator {
             case 'integer':
             case 'string':
             case 'boolean':
+            case 'date':
+            case 'datetime':
+            case 'float':
+            case 'smallint':
+            case 'bigint':
+            case 'decimal':
+            case 'time':
                 $field = 'Input';
                 break;
             case 'text':
