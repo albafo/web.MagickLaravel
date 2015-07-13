@@ -81,6 +81,9 @@ class FieldGenerator {
             case 'text':
                 $field = 'Wysiwyg';
                 break;
+            case 'simple_array':
+                $field = 'Select';
+                break;
             default :
                 $field = 'Input';
 

@@ -10,7 +10,8 @@ namespace Magia\Model\Form;
 
 
 
-class CheckboxField extends InputField{
+class CheckboxField extends InputField
+{
 
     const TYPE = "checkbox";
 

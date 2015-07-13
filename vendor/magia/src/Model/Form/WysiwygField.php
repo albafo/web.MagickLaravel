@@ -11,9 +11,8 @@ namespace Magia\Model\Form;
 
 use Magia\Model\ViewComposers\ViewIncludes;
 
-class WysiwygField extends Field{
-
-
+class WysiwygField extends Field
+{
 
     protected $value = '';
 

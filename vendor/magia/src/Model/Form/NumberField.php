@@ -10,7 +10,8 @@ namespace Magia\Model\Form;
 
 
 
-class NumberField extends InputField{
+class NumberField extends InputField
+{
 
     const TYPE = "number";
 

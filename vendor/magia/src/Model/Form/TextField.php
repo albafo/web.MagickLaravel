@@ -10,7 +10,8 @@ namespace Magia\Model\Form;
 
 
 
-class TextField extends InputField{
+class TextField extends InputField
+{
 
     const TYPE = "text";
 
