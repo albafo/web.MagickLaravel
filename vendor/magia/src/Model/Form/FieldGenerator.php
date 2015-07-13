@@ -21,9 +21,16 @@ class FieldGenerator {
     {
         $fields = array();
         $table = $item->getTable();
+
         foreach($item->getAttributes() as $index => $value)
         {
             $fields[] = $this->generateField($table, $index, $value);
+        }
+
+        foreach($item->getRelations() as $relation=>$relationModel)
+        {
+
+            $fields[] = $this->generateFieldFromRelation($relation, $relationModel);
         }
 
         return $fields;
@@ -50,8 +57,13 @@ class FieldGenerator {
         $column = $this->getColumn($table, $index);
         $fieldComposer = $this->selectFieldComposer($column);
 
+        $fieldComposer = new $fieldComposer();
+        return $fieldComposer->generateField($column, $value);
+    }
 
-        return $fieldComposer::generateField($column, $value);
+    public function generateFieldFromRelation($relation, $relationModel)
+    {
+        
     }
 
 
@@ -63,20 +75,30 @@ class FieldGenerator {
         $type = $column->getType()->getName();
 
         $field = null;
-        $addScripts = false;
 
-        switch($type) {
+        switch($type)
+        {
             case 'integer':
-            case 'string':
-            case 'boolean':
-            case 'date':
-            case 'datetime':
             case 'float':
             case 'smallint':
             case 'bigint':
             case 'decimal':
+                $field = "Number";
+                break;
+            case 'string':
+                $field = "Text";
+                break;
+            case 'boolean':
+                $field = "Checkbox";
+                break;
+            case 'date':
+                $field = "Date";
+                break;
+            case 'datetime':
+                $field = "DateTime";
+                break;
             case 'time':
-                $field = 'Input';
+                $field = "Time";
                 break;
             case 'text':
                 $field = 'Wysiwyg';
@@ -89,6 +111,8 @@ class FieldGenerator {
 
         }
 
+        if($this->isLikeImage($column))
+            $field = 'Image';
 
 
 
@@ -96,4 +120,19 @@ class FieldGenerator {
         return "\\Magia\\Model\\Form\\".$fieldComposer;
     }
 
+    /**
+     * @param \Doctrine\DBAL\Schema\Column $column
+     * return boolean
+     */
+    public function isLikeImage($column)
+    {
+        $type = $column->getType()->getName();
+        $name = $column->getName();
+        $result = false;
+        if(($name == "image" || $name == "picture") && ($type == "string" || $type == "text"))
+        {
+            $result = true;
+        }
+        return $result;
+    }
 }

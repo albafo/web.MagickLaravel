@@ -13,7 +13,7 @@ namespace Magia\Model\Form;
 class NumberField extends InputField
 {
 
-    const TYPE = "number";
+    protected $type = "number";
 
     protected static function getHtmlAttributes($column, $value = null)
     {

@@ -33,50 +33,13 @@ class InputField extends Field{
      * @param \Doctrine\DBAL\Schema\Column $column
      * @param mixed $value
      */
-    public static function generateField($column, $value=null)
+    public function generateField($column, $value=null)
     {
 
-        $fieldObject = null;
-        $type = $column->getType()->getName();
-        $field = null;
-        switch($type)
-        {
-            case 'integer':
-            case 'float':
-            case 'smallint':
-            case 'bigint':
-            case 'decimal':
-                $field = "Number";
-                break;
-            case 'string':
-                $field = "Text";
-                break;
-            case 'boolean':
-                $field = "Checkbox";
-                break;
-            case 'date':
-                $field = "Date";
-                break;
-            case 'datetime':
-                $field = "DateTime";
-                break;
-            case 'time':
-                $field = "Time";
-                break;
-            default:
-                $field = null;
-        }
+        $this->setLabel($column->getName());
+        $this->htmlAttributes = $this->getHtmlAttributes($column, $value);
 
-        if($field) {
-            $fieldComposer = "\\Magia\\Model\\Form\\" . $field . "Field";
-
-            $fieldObject = new InputField();
-            $fieldObject->setLabel($column->getName());
-            $fieldObject->type = $fieldComposer::TYPE;
-            $fieldObject->htmlAttributes = $fieldComposer::getHtmlAttributes($column, $value);
-        }
-
-        return $fieldObject;
+        return $this;
 
     }
 

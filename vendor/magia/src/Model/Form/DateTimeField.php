@@ -12,7 +12,7 @@ namespace Magia\Model\Form;
 
 class DateTimeField extends InputField{
 
-    const TYPE = "datetime-local";
+    protected $type = "datetime-local";
 
 
 

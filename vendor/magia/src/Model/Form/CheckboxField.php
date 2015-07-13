@@ -13,7 +13,7 @@ namespace Magia\Model\Form;
 class CheckboxField extends InputField
 {
 
-    const TYPE = "checkbox";
+    protected $type = "checkbox";
 
     protected static function getHtmlAttributes($column, $value = null)
     {

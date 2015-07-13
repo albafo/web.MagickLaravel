@@ -68,6 +68,11 @@ class MagickEloquent extends Model{
         return $this->primaryKey;
     }
 
+    public function getRelationType($relation)
+    {
+        return get_class($relation);
+    }
+
 
 
 

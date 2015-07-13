@@ -12,7 +12,7 @@ namespace Magia\Model\Form;
 
 class TimeField extends InputField{
 
-    const TYPE = "time";
+    protected $type = "time";
 
 
 

@@ -12,7 +12,8 @@ namespace Magia\Model\Form;
 
 class DateField extends InputField{
 
-    const TYPE = "date";
+    protected $type = "date";
+
 
 
 

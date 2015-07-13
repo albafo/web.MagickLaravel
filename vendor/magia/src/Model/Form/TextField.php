@@ -13,7 +13,7 @@ namespace Magia\Model\Form;
 class TextField extends InputField
 {
 
-    const TYPE = "text";
+    protected $type = "text";
 
     protected static function getHtmlAttributes($column, $value = null)
     {
