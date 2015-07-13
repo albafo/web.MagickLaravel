@@ -39,11 +39,23 @@ class SelectField extends Field
         foreach($this->options as $option) {
             $option = str_replace("'", '', $option);
             $option = str_replace("\"", '', $option);
-            $options .= "<option value='$option' >$option</option>";
+            $selected = "";
+
+            if($this->multiple) {
+                $values = explode(",", $this->value);
+                if(in_array($option, $values)) {
+                    $selected = "selected";
+                }
+            }
+            if($this->value == $option) {
+                $selected = "selected";
+            }
+            $options .= "<option value='$option' $selected >$option</option>";
         }
         $multiple = "";
         if($this->multiple)
             $multiple="multiple";
+
 
 
         return "<select $multiple $userAttr>$options</select>";
@@ -60,6 +72,8 @@ class SelectField extends Field
         $field->options = $column->getValues();
         if(!$column->hasUniqueValue())
             $field->multiple = true;
+        if($value)
+            $field->value = $value;
         $field->setLabel($column->getName());
         return $field;
     }
