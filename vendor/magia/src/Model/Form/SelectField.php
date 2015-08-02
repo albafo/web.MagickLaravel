@@ -9,22 +9,18 @@
 namespace Magia\Model\Form;
 
 
-use Magia\Model\ViewComposers\ViewIncludes;
 
 class SelectField extends Field
 {
 
     protected $options = array();
-    protected $value = null;
+    protected $value = array();
     protected $multiple = false;
+    protected $name = null;
 
     protected static $addedScripts = false;
 
-    public function __construct()
-    {
 
-
-    }
 
     public function generateCode($extraAttr = array())
     {
@@ -36,29 +32,33 @@ class SelectField extends Field
             $userAttr .= "$index='$value' ";
         }
 
-        foreach($this->options as $option) {
-            $option = str_replace("'", '', $option);
-            $option = str_replace("\"", '', $option);
+        foreach($this->options as $index=>$option) {
+
             $selected = "";
 
-            if($this->multiple) {
-                $values = explode(",", $this->value);
-                if(in_array($option, $values)) {
-                    $selected = "selected";
-                }
-            }
-            if($this->value == $option) {
+
+
+            if(in_array($index, $this->value)) {
                 $selected = "selected";
             }
-            $options .= "<option value='$option' $selected >$option</option>";
+
+
+            $options .= "<option value='$index' $selected >$option</option>";
         }
         $multiple = "";
         if($this->multiple)
             $multiple="multiple";
+        $fieldName = $this->generateFieldName($this->name);
+        return "<select $multiple $userAttr $fieldName>$options</select>";
+    }
 
-
-
-        return "<select $multiple $userAttr>$options</select>";
+    protected function generateFieldName($name)
+    {
+        $result =  parent::generateFieldName($name);
+        if($this->multiple) {
+            $result = "name='field[$name][]'";
+        }
+        return $result;
     }
 
 
@@ -66,17 +66,36 @@ class SelectField extends Field
      * @param \Doctrine\DBAL\Schema\Column $column
      * @param mixed $value
      */
-    public static function generateField($column, $value=null)
+    public function generateField($column, $value=null)
     {
-        $field = new SelectField();
-        $field->options = $column->getValues();
+
+        $multiple = false;
+        $options = $column->getValues();
+        $options_temp = array();
+        foreach($options as $index=>$option) {
+            $option = str_replace("'", '', $option);
+            $option = str_replace("\"", '', $option);
+            $options_temp[$option] = $option;
+        }
+        $options = $options_temp;
         if(!$column->hasUniqueValue())
-            $field->multiple = true;
-        if($value)
-            $field->value = $value;
-        $field->setLabel($column->getName());
-        return $field;
+            $multiple = true;
+        $value = explode(",", $value);
+        $name = $column->getName();
+        return $this->generateFilledField($options, $name, $multiple, $value);
     }
+
+    public function generateFilledField($options, $name, $multiple = false, $value = array())
+    {
+        $this->options = $options;
+        $this->multiple = $multiple;
+        $this->value = $value;
+        $this->name = $name;
+        $this->setLabel($name);
+        return $this;
+    }
+
+
 
 
 

@@ -15,6 +15,7 @@ class MagickEloquent extends Model{
 
     protected $title = '';
 
+
     /**
      * @return string
      */
@@ -55,6 +56,12 @@ class MagickEloquent extends Model{
             }
         }
 
+        foreach($this->getRelations() as $relation=>$relationModel)
+        {
+            $index = $this->$relation()->getForeignKey();
+            unset($allAttributes[$index]);
+        }
+
         return $allAttributes;
 
     }
@@ -71,6 +78,10 @@ class MagickEloquent extends Model{
     public function getRelationType($relation)
     {
         return get_class($relation);
+    }
+
+    public function getText() {
+        return $this;
     }
 
 

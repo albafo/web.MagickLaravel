@@ -29,10 +29,7 @@ class MagiaServiceProvider extends ServiceProvider {
         include __DIR__.'/routes.php';
         include __DIR__.'/viewComposers.php';
 
-        $this->app['admin_menu'] = $this->app->share(function($app)
-        {
-            return new Menu();
-        });
+
 
     }
 

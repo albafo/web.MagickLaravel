@@ -26,4 +26,9 @@ Route::group(['prefix'=> 'admin'], function()
         'as' => 'admin_edit',
         'uses' => 'Magia\Controller\AdminController@edit'
     ));
+
+    Route::post('{model}/{id}', array(
+        'as' => 'admin_post',
+        'uses' => 'Magia\Controller\AdminController@postEdit'
+    ));
 });

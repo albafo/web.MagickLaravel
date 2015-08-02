@@ -9,6 +9,10 @@
 namespace Magia\Model\Form;
 
 
+
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Magia\Model\Relations\MagiaRelation;
+
 class FieldGenerator {
 
 
@@ -30,7 +34,8 @@ class FieldGenerator {
         foreach($item->getRelations() as $relation=>$relationModel)
         {
 
-            $fields[] = $this->generateFieldFromRelation($relation, $relationModel);
+            $relationObject = $item->$relation();
+            $fields[] = $this->generateFieldFromRelation($relation, $relationObject, $relationModel);
         }
 
         return $fields;
@@ -57,13 +62,18 @@ class FieldGenerator {
         $column = $this->getColumn($table, $index);
         $fieldComposer = $this->selectFieldComposer($column);
 
-        $fieldComposer = new $fieldComposer();
+        $obligation = $this->getObligationFromColumn($column);
+
+        $fieldComposer = new $fieldComposer($obligation);
         return $fieldComposer->generateField($column, $value);
     }
 
-    public function generateFieldFromRelation($relation, $relationModel)
+    public function generateFieldFromRelation($relation, $relationObject, $relationModel)
     {
-        
+        $fieldComposer = $this->selectFieldComposerFromRelation($relationObject);
+        $obligation = $this->getObligationFromRelation($relationObject);
+        $fieldComposer = new $fieldComposer($obligation);
+        return $fieldComposer->generateFieldFromRelation($relation, $relationObject, $relationModel);
     }
 
 
@@ -120,6 +130,23 @@ class FieldGenerator {
         return "\\Magia\\Model\\Form\\".$fieldComposer;
     }
 
+    public function selectFieldComposerFromRelation($relation)
+    {
+        $field = null;
+
+        if($relation instanceof \Illuminate\Database\Eloquent\Relations\BelongsTo)
+        {
+            $field = "Select2";
+        }
+        if($relation instanceof \Illuminate\Database\Eloquent\Relations\BelongsToMany)
+        {
+            $field = "Select2";
+        }
+        if($field)
+            $field .= "Field";
+        return "\\Magia\\Model\\Form\\".$field;
+    }
+
     /**
      * @param \Doctrine\DBAL\Schema\Column $column
      * return boolean
@@ -135,4 +162,32 @@ class FieldGenerator {
         }
         return $result;
     }
+    /**
+     * @param \Doctrine\DBAL\Schema\Column $column
+     * return boolean
+     */
+    public function getObligationFromColumn($column)
+    {
+        return $column->getNotnull();
+    }
+
+    /* @param \Illuminate\Database\Eloquent\Relations\Relation $relation
+     * return boolean
+     */
+    public function getObligationFromRelation($relation)
+    {
+        $result = false;
+        $className = class_basename($relation);
+
+        if ($className == MagiaRelation::BELONGS_TO) {
+
+            $column = $this->getColumn($relation->getParent()->getTable(), $relation->getForeignKey());
+
+            $result = $this->getObligationFromColumn($column);
+
+        }
+
+        return $result;
+    }
+
 }

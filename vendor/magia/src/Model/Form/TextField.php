@@ -15,7 +15,7 @@ class TextField extends InputField
 
     protected $type = "text";
 
-    protected static function getHtmlAttributes($column, $value = null)
+    protected  function getHtmlAttributes($column, $value = null)
     {
         $result = parent::getHtmlAttributes($column, $value);
 

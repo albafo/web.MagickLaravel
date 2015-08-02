@@ -9,24 +9,26 @@
 namespace Magia\Model\Form;
 
 
-use Magia\Model\ViewComposers\ViewIncludes;
+use Magia\View\ViewComposers\ViewIncludes;
 
 class WysiwygField extends Field
 {
 
     protected $value = '';
+    protected $name = '';
 
     protected static $addedScripts = false;
 
-    public function __construct()
+    public function __construct($obligation)
     {
+        parent::__construct($obligation);
         if(!self::$addedScripts) {
             ViewIncludes::getInstance()->addCss("plugins/summernote-master/summernote.css");
             ViewIncludes::getInstance()->addJsAfter("plugins/summernote-master/summernote.min.js");
             ViewIncludes::getInstance()->addScript("
                 <script>
-
-                    $('.summernote').summernote({
+                    var editor = $('.summernote');
+                    editor.summernote({
                       height: 350
                     });
 
@@ -41,7 +43,8 @@ class WysiwygField extends Field
     public function generateCode($extraAttr = array())
     {
 
-        return "<div class='summernote'>{$this->value}</div>";
+
+        return "<textarea class='summernote' name='field[{$this->name}]'>{$this->value}</textarea>";
     }
 
 
@@ -49,13 +52,14 @@ class WysiwygField extends Field
      * @param \Doctrine\DBAL\Schema\Column $column
      * @param mixed $value
      */
-    public static function generateField($column, $value=null)
+    public  function generateField($column, $value=null)
     {
-        $field = new WysiwygField();
+
         if($value)
-            $field->value = $value;
-        $field->setLabel($column->getName());
-        return $field;
+            $this->value = $value;
+        $this->setLabel($column->getName());
+        $this->name = $column->getName();
+        return $this;
     }
 
 

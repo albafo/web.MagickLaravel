@@ -1,1 +1,13 @@
 /* Write your custom CSS here */
+
+.navbar {
+    border: none !important;
+}
+
+.page-content {
+    background: #34425A !important;
+}
+
+.note-editor .note-editable{
+    background-color: #ffffff;
+}

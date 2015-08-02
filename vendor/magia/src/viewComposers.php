@@ -6,7 +6,7 @@
  * Time: 00:18
  */
 
-use \Magia\Model\ViewComposers\ViewIncludes;
+use \Magia\View\ViewComposers\ViewIncludes;
 
 View::composer('magia::layout', function($view)
 {
@@ -93,4 +93,4 @@ View::composer('magia::layout', function($view)
 
 });
 
-View::composer('magia::edit', 'Magia\\Model\\ViewComposers\\EditComposer');
+View::composer('magia::edit', 'Magia\\View\\ViewComposers\\EditComposer');

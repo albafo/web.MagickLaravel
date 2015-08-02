@@ -48,14 +48,16 @@ class InputField extends Field{
      * @param mixed $value
      * @return string
      */
-    protected static function getHtmlAttributes($column, $value = null)
+    protected function getHtmlAttributes($column, $value = null)
     {
         $result = "";
         if(isset($value))
             $result.="value='$value' ";
 
-        if($name = $column->getName())
-            $result.="id='field_$name' name='field[$name]' ";
+        if($name = $column->getName()) {
+            $fieldName = $this->generateFieldName($name);
+            $result .= "id='field_$name'  $fieldName";
+        }
 
 
         return $result;

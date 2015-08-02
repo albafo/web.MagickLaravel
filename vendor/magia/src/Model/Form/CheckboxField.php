@@ -15,7 +15,7 @@ class CheckboxField extends InputField
 
     protected $type = "checkbox";
 
-    protected static function getHtmlAttributes($column, $value = null)
+    protected  function getHtmlAttributes($column, $value = null)
     {
         $result = parent::getHtmlAttributes($column, $value);
 

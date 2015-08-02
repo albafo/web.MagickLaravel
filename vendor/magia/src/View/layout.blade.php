@@ -10,7 +10,8 @@
         <meta name="description" content="Admin Dashboard Template" />
         <meta name="keywords" content="admin,dashboard" />
         <meta name="author" content="Steelcoders" />
-            <!-- Styles Magia -->
+
+        <!-- Styles Magia -->
         @foreach($css as $cssHref)
         <link href="{{$cssHref}}" rel="stylesheet"/>
         @endforeach

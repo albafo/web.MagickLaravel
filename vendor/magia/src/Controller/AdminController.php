@@ -103,9 +103,8 @@ class AdminController extends Controller{
 
     public function edit($model, $id)
     {
-        $model = $this->generateModel($model);
-        list($index, $value) = $this->extractParameter($id);
-        $item = $model->where($index, $value)->first();
+
+        $item = $this->getItem($model, $id);
         return view('magia::edit', ['item'=>$item]);
     }
 
@@ -140,6 +139,30 @@ class AdminController extends Controller{
             $model .= ucfirst($part);
         return $model;
     }
+
+    public function getItem($model, $id) {
+
+        $modelObject = $this->generateModel($model);
+        list($index, $value) = $this->extractParameter($id);
+        $item = $modelObject->where($index, $value)->first();
+        return $item;
+    }
+
+    public function postEdit($model, $id)
+    {
+        $item = $this->getItem($model, $id);
+        $fields = \Request::get('field');
+        dd($fields);
+        $files = \Request::file('field');
+        foreach($files as $index=>$file)
+        {
+            /* @var \Symfony\Component\HttpFoundation\File\UploadedFile $file*/
+
+        }
+
+    }
+
+
 
 
 }
