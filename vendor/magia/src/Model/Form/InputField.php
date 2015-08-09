@@ -11,7 +11,7 @@ namespace Magia\Model\Form;
 
 class InputField extends Field{
 
-    protected $type = '';
+    protected $type = 'text';
     protected $htmlAttributes = '';
     public $labelName = '';
     public $labelFor = '';
@@ -35,7 +35,7 @@ class InputField extends Field{
      */
     public function generateField($column, $value=null)
     {
-
+        parent::generateField($column);
         $this->setLabel($column->getName());
         $this->htmlAttributes = $this->getHtmlAttributes($column, $value);
 

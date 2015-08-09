@@ -22,7 +22,6 @@ class ImageField extends InputField
     const SRC_EMPTY_IMAGE = "packages/magia/images/no_image_available.png";
 
 
-
     public function generateCode($extraAttr = array())
     {
         $result = parent::generateCode($extraAttr);
@@ -47,6 +46,9 @@ class ImageField extends InputField
         $result->value = $value;
         $this->name = $column->getName();
 
+        ViewIncludes::getInstance()->addJsAfter('plugins/magia/imageform.js');
+
+
         $this->addImageScripts($column->getName());
 
 
@@ -57,13 +59,6 @@ class ImageField extends InputField
     {
         ViewIncludes::getInstance()->addScript("
         <script>
-            var resetSrc = false;
-
-            function saveFirstImage(image) {
-                if(!resetSrc) {
-                    resetSrc = image.attr('src');
-                }
-            }
 
             function msgImageChanged() {
                 toastr.options = {
@@ -76,66 +71,38 @@ class ImageField extends InputField
                 toastr.info('Los cambios de imágenes no se registrarán hasta que se guarde la ficha.', '¡CUIDADO!');
             }
 
-            function resetAction(resetButton, image, input, hidden) {
-                resetButton.click(function() {
-                    image.attr('src', resetSrc);
-                    input = typeof input !== 'undefined' ? input : false;
-                    hidden = typeof hidden !== 'undefined' ? hidden : false;
-                    if(input)
-                        input.val('');
-                    if(hidden)
-                        hidden.val(0);
-                });
-            }
-            $('button.remove-image').click(function(event) {
-                var hiddenDelete = $(this).parent().find('input[type=hidden]');
-                var image = $(this).parent().find('img');
-                var resetButton = $(this).parent().find('button.reset-image');
 
-                hiddenDelete.val(1);
-                saveFirstImage(image);
-                image.attr('src', '".asset(self::SRC_EMPTY_IMAGE)."');
-                resetAction(resetButton, image, false, hiddenDelete);
-                msgImageChanged();
+
+            var image_$name = $('#field_$name').imageform({
+                noImageSrc : '".asset(self::SRC_EMPTY_IMAGE)."',
+                imgDOM: $('#field_$name').parent().find('img'),
+                hiddenDeleteDOM: $('#field_$name').parent().find('input[type=hidden]'),
+                onImgUpdate: msgImageChanged
+            });
+
+
+
+
+            $('#field_$name').parent().find('button.remove-image').click(function(event) {
+
+               image_$name.imageform('remove');
+
+            });
+
+             $('#field_$name').parent().find('button.reset-image').click(function(event) {
+
+               image_$name.imageform('reset');
 
             });
 
             $('#field_$name').change(function(event){
 
-                var input = $(this);
-                var image = $(this).parent().find('img');
-                var resetButton = $(this).parent().find('button.reset-image');
+                image_$name.imageform('eventToImage', event);
 
-                saveFirstImage(image);
-
-                resetAction(resetButton, image, input);
-                msgImageChanged();
-
-
-                var files = event.target.files;
-
-                for (var i = 0, f; f = files[i]; i++) {
-
-                    // Only process image files.
-                    if (!f.type.match('image.*')) {
-                        continue;
-                    }
-
-                    var reader = new FileReader();
-
-                  // Closure to capture the file information.
-                    reader.onload = (function(theFile) {
-                        return function(e) {
-                        // Render thumbnail.
-
-                            image.attr('src', e.target.result);
-                        };
-                    })(f);
-
-                    // Read in the image file as a data URL.
-                    reader.readAsDataURL(f);
-                }
             });
+
+
+
         </script>
         ");
     }

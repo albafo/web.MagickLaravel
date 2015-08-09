@@ -10,6 +10,8 @@ namespace Magia\Controller;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Model;
+use Magia\Controller\Composer\ModelListComposer;
+use Magia\Model\MagickEloquent;
 
 class AdminController extends Controller{
 
@@ -93,12 +95,9 @@ class AdminController extends Controller{
 
     public function modelList($model)
     {
-        $modelObject = $this->generateModel($model);
-        $primaryKey = $modelObject->getPrimaryKey();
-        $count = $modelObject->all()->count();
-        return view('magia::list', ['count'=>$count, 'modelObject'=>$modelObject, 'primaryKey'=>$primaryKey, 'modelName'=>$model]);
-
-
+        $model = MagickEloquent::getModel($model);
+        $list = ModelListComposer::getList($model);
+        return view("magia::list", array("list"=>$list));
     }
 
     public function edit($model, $id)
@@ -114,7 +113,7 @@ class AdminController extends Controller{
 
         $modelPath = '\\App\\'.$model;
         if(!class_exists($modelPath)) {
-            throw new \Exception("Class $model not found");
+            throw new \Exception("Class $modelPath not found");
         }
 
         /* @var \Magia\Model\MagickEloquent $modelObject */
@@ -152,8 +151,15 @@ class AdminController extends Controller{
     {
         $item = $this->getItem($model, $id);
         $fields = \Request::get('field');
-        dd($fields);
+
+        foreach($fields as $index=>$value) {
+            if(!is_array($value))
+                $item->$index = $value;
+
+            $item->save();
+        }
         $files = \Request::file('field');
+
         foreach($files as $index=>$file)
         {
             /* @var \Symfony\Component\HttpFoundation\File\UploadedFile $file*/

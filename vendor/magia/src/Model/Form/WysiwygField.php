@@ -17,26 +17,23 @@ class WysiwygField extends Field
     protected $value = '';
     protected $name = '';
 
-    protected static $addedScripts = false;
 
     public function __construct($obligation)
     {
         parent::__construct($obligation);
-        if(!self::$addedScripts) {
-            ViewIncludes::getInstance()->addCss("plugins/summernote-master/summernote.css");
-            ViewIncludes::getInstance()->addJsAfter("plugins/summernote-master/summernote.min.js");
-            ViewIncludes::getInstance()->addScript("
-                <script>
-                    var editor = $('.summernote');
-                    editor.summernote({
-                      height: 350
-                    });
+        ViewIncludes::getInstance()->addCss("plugins/summernote-master/summernote.css");
+        ViewIncludes::getInstance()->addJsAfter("plugins/summernote-master/summernote.min.js");
+        ViewIncludes::getInstance()->addScript("
+            <script>
+                var editor = $('.summernote');
+                editor.summernote({
+                  height: 350
+                });
 
-                </script>
-            ");
-        }
+            </script>
+        ");
 
-        self::$addedScripts = true;
+
 
     }
 

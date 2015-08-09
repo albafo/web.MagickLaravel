@@ -33,17 +33,18 @@ class ViewIncludes {
 
     public function addCss($path)
     {
-        $this->css[] = $path;
+        $this->addScriptToArray($this->css, $path);
+
     }
 
     public function addJsBefore($path)
     {
-        $this->jsBefore[] = $path;
+        $this->addScriptToArray($this->jsBefore, $path);
     }
 
     public function addJsAfter($path)
     {
-        $this->jsAfter[] = $path;
+        $this->addScriptToArray($this->jsAfter, $path);
     }
 
     /**
@@ -80,7 +81,18 @@ class ViewIncludes {
 
     public function addScript($script)
     {
-        $this->scripts[] = $script;
+        $this->addScriptToArray($this->scripts, $script);
+    }
+
+    protected function addScriptToArray(&$array, $script)
+    {
+        if(!$this->scriptExists($array, $script))
+            $array[] = $script;
+    }
+
+    protected function scriptExists($scriptArray, $script) {
+        return in_array($script, $scriptArray);
+
     }
 
 

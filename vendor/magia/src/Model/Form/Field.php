@@ -13,6 +13,7 @@ class Field {
     public $labelName = '';
     public $labelFor = '';
     protected $obligatory = false;
+    protected $name;
 
 
     public function __construct($obligatory=false)
@@ -24,6 +25,14 @@ class Field {
         $this->labelName = ucfirst(strtolower($name));
         $this->labelFor = "field_".$name;
     }
+    /**
+     * @param \Doctrine\DBAL\Schema\Column $column
+     * @param mixed $value
+     */
+    public function generateField($column)
+    {
+        $this->name = $column->getName();
+    }
 
     protected function generateFieldName($name)
     {
@@ -32,6 +41,10 @@ class Field {
 
     public function isObligatory() {
         return $this->obligatory;
+    }
+
+    public function getName() {
+        return $this->name;
     }
 
 }

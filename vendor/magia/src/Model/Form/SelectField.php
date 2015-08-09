@@ -18,7 +18,6 @@ class SelectField extends Field
     protected $multiple = false;
     protected $name = null;
 
-    protected static $addedScripts = false;
 
 
 

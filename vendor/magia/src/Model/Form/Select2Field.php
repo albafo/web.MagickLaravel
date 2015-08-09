@@ -21,6 +21,7 @@ class Select2Field extends SelectField
     protected $limitSelection = 0;
 
 
+
     /**
      * @param string $relation
      * @param \Illuminate\Database\Eloquent\Relations\Relation $relationObject
@@ -55,7 +56,6 @@ class Select2Field extends SelectField
         }
 
 
-        ViewIncludes::getInstance()->addJsAfter("plugins/select2/js/select2.min.js");
         $result = parent::generateFilledField($options, $name, $multiple, $value);
         $maxLimit = "";
         if($this->limitSelection > 0) {
@@ -70,6 +70,7 @@ class Select2Field extends SelectField
 
             </script>
          ");
+        ViewIncludes::getInstance()->addJsAfter("plugins/select2/js/select2.min.js");
         ViewIncludes::getInstance()->addCss("plugins/select2/css/select2.min.css");
         return $result;
     }
